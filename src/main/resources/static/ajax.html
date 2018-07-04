@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    </script>
+<script src="jquery-1.8.3.min.js" type="text/javascript" charset="utf-8" async defer></script>
+</head>
+<body onload="init()">
+<input type="button" value="login" onclick='getAjax1("get","http://localhost:9090/login",null,success);' />
+<input type="button" value="hello" onclick='getAjax1("get","http://localhost:9090/hello",null,success);'/>
+<input type="button" value="logout" onclick='getAjax1("get","http://localhost:9090/logout",null,success);'/>
+<script type="text/javascript">
+
+
+var getAjax;
+var JSESSIONID;
+function initjsessionid(xhr)
+{
+    JSESSIONID=xhr.getResponseHeader("JSESSIONID");
+}
+function initjsessionid1(obj)
+{
+    var dataobj= obj.data;
+     if(dataobj.tocken)
+     {
+      JSESSIONID=dataobj.tocken;
+     }
+}
+function init(){
+ $.ajaxSetup({
+
+   contentType:"text/plain;charset=utf-8",
+   xhrFields: {
+      withCredentials: true
+   },
+
+   statusCode: {
+     404: function() {
+         alert('数据获取/输入失败，没有此服务。404');
+     },
+     504: function() {
+         alert('数据获取/输入失败，服务器没有响应。504');
+     },
+
+   }
+});
+
+
+ //利用jsessionid的方式
+ getAjax=function (method, apiUrl, options, callback) {
+      if(JSESSIONID!=null)
+        apiUrl+";jsessionid="+JSESSIONID;
+        var xhr = $.ajax({
+            async:true,
+            type: method,
+            url: apiUrl,
+            data: options,
+            headers:{"abcd":"true"},
+            timeout: 300000,          // 设置超时时间
+            dataType:'json',
+            success: function(json) {
+               // $.hideLoading();    // 成功后，隐藏loading组件
+               if(callback && callback instanceof Function ) {
+              // if(callback) {
+                 initjsessionid(xhr);
+                    callback(json);
+                }
+            },
+             beforeSend: function (xhr) {
+               // $.showLoading();    // 数据加载成功之前，使用loading组件
+
+            },
+            error: function (XMLHttpRequest) {
+             var sessionstatus=XMLHttpRequest.status;
+               if(sessionstatus==403)
+               {
+                  alert("会话超时");
+                  JSESSIONID=null;
+               }else
+               {
+                 alert(XMLHttpRequest.error);
+               }
+
+            },
+
+        }).done(function (data, textStatus, xhr) {
+    console.log(xhr.getResponseHeader('SESSIONSTATUS'));
+});
+    };
+
+
+   //用tocken的方式
+getAjax1=function (method, apiUrl, options, callback) {
+
+        var xhr = $.ajax({
+            async:true,
+            type: method,
+            url: apiUrl,
+            data: options,
+            headers:{"abcd":JSESSIONID},
+            timeout: 300000,          // 设置超时时间
+            dataType:'json',
+            success: function(json) {
+               // $.hideLoading();    // 成功后，隐藏loading组件
+               if(callback && callback instanceof Function ) {
+              // if(callback) {
+                 initjsessionid1(json);
+                    callback(json);
+                }
+            },
+             beforeSend: function (xhr) {
+               // $.showLoading();    // 数据加载成功之前，使用loading组件
+
+            },
+            error: function (XMLHttpRequest) {
+             var sessionstatus=XMLHttpRequest.status;
+               if(sessionstatus==403)
+               {
+                  alert("会话超时");
+               }else
+               {
+                 alert(XMLHttpRequest.error);
+               }
+
+            },
+
+        }).done(function (data, textStatus, xhr) {
+    console.log(xhr.getResponseHeader('SESSIONSTATUS'));
+});
+    };
+
+
+}
+
+  function success(obj)
+    {
+
+      var aa=JSON.stringify(obj.data);
+      alert(aa);
+    }
+</script>
+
+<div id="result"></div>
+<div id="list"></div>
+</body>
+</html>
