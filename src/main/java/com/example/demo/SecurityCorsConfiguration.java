@@ -22,10 +22,13 @@ public class SecurityCorsConfiguration {
 
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowCredentials(true);
-                config.addAllowedOrigin(httpServletRequest.getHeader("Origin"));
+               // config.addAllowedOrigin(httpServletRequest.getHeader("Origin"));
+               config.addAllowedOrigin(CorsConfiguration.ALL);
                 config.addAllowedHeader(CorsConfiguration.ALL);
                 config.addAllowedMethod(CorsConfiguration.ALL);
-                return config;
+
+                config.addExposedHeader("jsessionid");
+                 return config;
             }
         };
 

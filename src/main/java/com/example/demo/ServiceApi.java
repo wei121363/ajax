@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,11 +15,14 @@ import java.util.Map;
 public class ServiceApi {
 
     @RequestMapping("/hello")
-    public JSONEntity sayHello(){
+    public JSONEntity sayHello(HttpServletRequest req,HttpServletResponse res){
 
         JSONEntity entity=new JSONEntity();
         entity.setData("abcd");
         entity.setStatus(0);
+      //  res.setHeader("abcd",req.getSession(false).getId());
+
+
         return entity;
 
     }
@@ -26,7 +30,7 @@ public class ServiceApi {
 
 
     @RequestMapping("/login")
-    public JSONEntity login(HttpServletRequest req){
+    public JSONEntity login(HttpServletRequest req,HttpServletResponse res){
 
 
        Object obj= req.getSession().getAttribute("login");
@@ -40,6 +44,10 @@ public class ServiceApi {
       aa.put("tocken",req.getSession(false).getId());
         entity.setData(aa);
         entity.setStatus(0);
+
+
+        res.setHeader("jsessionid",req.getSession(false).getId());
+
 
         return entity;
 
