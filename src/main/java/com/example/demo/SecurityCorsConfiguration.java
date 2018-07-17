@@ -26,7 +26,7 @@ public class SecurityCorsConfiguration {
                config.addAllowedOrigin(CorsConfiguration.ALL);
                 config.addAllowedHeader(CorsConfiguration.ALL);
                 config.addAllowedMethod(CorsConfiguration.ALL);
-
+//暴露给前端传递的头参数
                 config.addExposedHeader("jsessionid");
                  return config;
             }
