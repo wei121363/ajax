@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/test")
 public class ServiceApi {
 
     @RequestMapping("/hello")
@@ -40,13 +41,13 @@ public class ServiceApi {
       }
 
         JSONEntity entity=new JSONEntity();
-      Map aa=new HashMap();
-      aa.put("tocken",req.getSession(false).getId());
+        Map aa=new HashMap();
+        aa.put("tocken",req.getSession(false).getId());
         entity.setData(aa);
         entity.setStatus(0);
 
 
-        res.setHeader("jsessionid",req.getSession(false).getId());
+      //  res.setHeader("jsessionid",req.getSession(false).getId());
 
 
         return entity;
@@ -54,7 +55,7 @@ public class ServiceApi {
     }
 
     @RequestMapping("/logout")
-    public JSONEntity logout(HttpServletRequest req){
+    public JSONEntity logout(HttpServletRequest req,HttpServletResponse res){
 
 
         HttpSession obj= req.getSession();
@@ -66,6 +67,8 @@ public class ServiceApi {
         JSONEntity entity=new JSONEntity();
         entity.setData("ok");
         entity.setStatus(1);
+
+
 
         return entity;
 

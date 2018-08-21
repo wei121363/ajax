@@ -17,12 +17,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@WebFilter(urlPatterns ={ "/*"})
+@WebFilter(urlPatterns ={ "/test/*"} )
 @Order(value = 2)
 public class SessionFilter implements Filter{
     //允许跳过filter的路径
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("/login")));
+            Arrays.asList("/test/login")));
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
